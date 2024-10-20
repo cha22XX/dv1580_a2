@@ -34,15 +34,3 @@ test_list: $(LIB_NAME) linked_list.o
 
 # Run tests
 run_tests: run_test_mmanager run_test_list
-	
-# Run test cases for the memory manager
-run_test_mmanager:
-	./test_memory_manager
-
-# Run test cases for the linked list
-run_test_list:
-	./test_linked_list
-
-# Clean target to clean up build files
-clean:
-	rm -f $(OBJ) $(LIB_NAME) test_memory_manager test_linked_list
