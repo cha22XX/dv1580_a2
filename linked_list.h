@@ -29,7 +29,8 @@ void list_cleanup(Node** head);
 
 #endif
 
+/*
 int list_count_nodes(Node **head);
 void list_cleanup(Node **head);
 
-#endif // LINKED_LIST_H
+#endif // LINKED_LIST_H*/
