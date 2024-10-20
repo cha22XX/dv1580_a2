@@ -25,10 +25,10 @@ mmanager: $(LIB_NAME)
 list: $(OBJ_LL)
 
 test_mmanager: $(LIB_NAME) $(OBJ_TEST_MM)
-	$(CC) -o test_memory_manager $(OBJ_TEST_MM) -L. -lmemory_manager -pthread
+	$(CC) -o test_memory_manager $(OBJ_TEST_MM) -L. -lmemory_manager -pthread -lm
 
 test_list: $(LIB_NAME) $(OBJ_LL) $(OBJ_TEST_LL)
-	$(CC) -o test_linked_list $(OBJ_LL) $(OBJ_TEST_LL) -L. -lmemory_manager -pthread
+	$(CC) -o test_linked_list $(OBJ_LL) $(OBJ_TEST_LL) -L. -lmemory_manager -pthread -lm
 
 run_tests: run_test_mmanager run_test_list
 
