@@ -32,6 +32,26 @@ test_mmanager: $(LIB_NAME)
 test_list: $(LIB_NAME) linked_list.o
 	$(CC) -o test_linked_list test_linked_list.o -L. -lmemory_manager -pthread 
 
+CC=gcc
+CFLAGS=-Wall -fPIC -pthread
+
+all: libmemory_manager.so test_mmanager test_linked_list
+
+libmemory_manager.so: memory_manager.o linked_list.o
+    $(CC) -shared -o $@ $^
+
+memory_manager.o: memory_manager.c memory_manager.h
+    $(CC) $(CFLAGS) -c $< -o $@
+
+linked_list.o: linked_list.c linked_list.h
+    $(CC) $(CFLAGS) -c $< -o $@
+
+test_memory_manager.o: test_memory_manager.c test_memory_manager.h
+    $(CC) $(CFLAGS) -c $< -o $@
+
+test_linked_list.o: test_linked_list.c test_linked_list.h
+    $(CC) $(CFLAGS) -c $< -o $@
+ 
 # Run tests
 run_tests: run_test_mmanager run_test_list
 	
