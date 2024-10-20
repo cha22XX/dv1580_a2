@@ -22,14 +22,13 @@ $(LIB_NAME): memory_manager.o linked_list.o
 test_mmanager: test_memory_manager.o $(LIB_NAME)
 	$(CC) -o $@ test_memory_manager.o -L. -lmemory_manager -pthread -lm
 
-
 # Test target to build the linked list test program
 test_list: test_linked_list.o $(LIB_NAME)
 	$(CC) -o $@ test_linked_list.o -L. -lmemory_manager -pthread -lm 
 
 # Run tests
 run_tests: run_test_mmanager run_test_list
-	
+ 
 # Run test cases for the memory manager
 run_test_mmanager:
 	./test_mmanager
