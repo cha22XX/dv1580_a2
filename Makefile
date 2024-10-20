@@ -20,11 +20,11 @@ $(LIB_NAME): memory_manager.o linked_list.o
 
 # Test target to run the memory manager test program
 test_mmanager: test_memory_manager.o $(LIB_NAME)
-	$(CC) -o $@ $< -L. -lmemory_manager -pthread -lm
+	$(CC) -o $@ $< -L. -lmemory_manager -pthread -lm  
 
 # Test target to run the linked list test program
 test_linked_list: test_linked_list.o $(LIB_NAME)
-	$(CC) -o $@ $< -L. -lmemory_manager -pthread -lm
+	$(CC) -o $@ $< -L. -lmemory_manager -pthread -lm 
 
 # Run tests
 run_tests: run_test_mmanager run_test_list
