@@ -12,14 +12,6 @@ pthread_mutex_t mem_mutex = PTHREAD_MUTEX_INITIALIZER; //
 pthread_mutex_t list_mutex = PTHREAD_MUTEX_INITIALIZER; // 
 
 
-typedef struct Block {
-    void* address; 
-    size_t size;    
-    bool is_free;   
-    struct Block* next; 
-} Block;
-
-
 void* memory_pool; // 
 Block* head_pool;  // 
 
