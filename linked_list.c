@@ -7,7 +7,12 @@
 #include <stdlib.h>
 
 
-
+// 
+typedef struct Node {
+    int data;
+    struct Node* next;
+    pthread_mutex_t node_mutex; 
+} Node;
 
 void list_init(Node** head, size_t size) {
     mem_init(size); // 
