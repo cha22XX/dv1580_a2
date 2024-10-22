@@ -13,7 +13,7 @@
 typedef struct Node {
     int data;
     struct Node* next;
-    pthread_mutex_t node_mutex; 
+    pthread_mutex_t node_mutex;
 } Node;
 
 void list_init(Node** head, size_t size);               
