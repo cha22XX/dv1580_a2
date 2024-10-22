@@ -7,6 +7,8 @@
 #include <stdbool.h>
 
 static pthread_mutex_t memory_mutex = PTHREAD_MUTEX_INITIALIZER;
+void* memory_pool = NULL;
+Block* head_pool = NULL; 
 
 void mem_init(size_t size) {
     pthread_mutex_lock(&memory_mutex);
