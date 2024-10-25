@@ -60,7 +60,7 @@ void list_insert_after(Node *prev_node, uint16_t data) {
 }
 
 void list_insert_before(Node **head, Node *next_node, uint16_t data) {
-    if (*head == NULL  next_node == NULL) {
+    if (*head == NULL || next_node == NULL) {
         printf("Cannot insert before NULL node.\n");
         return;
     }
