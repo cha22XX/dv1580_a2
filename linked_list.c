@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <pthread.h>
 
+//
 void list_init(Node **head, size_t size) {
     mem_init(size);
     *head = NULL;
