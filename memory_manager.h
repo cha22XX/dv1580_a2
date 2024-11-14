@@ -11,10 +11,10 @@
 
 
 // Helps C++ compilers to handle C header files
-#ifdef __cplusplus
+/*#ifdef __cplusplus
 extern "C"
 {
-#endif
+#endif*/
 
 #define POOL_SIZE 81920000 
 #define MAX_BLOCKS 100000      
