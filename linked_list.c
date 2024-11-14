@@ -192,7 +192,7 @@ void list_display_range(Node **head, Node *start_node, Node *end_node) {
     }
 
     printf("[");
-    while (temp != NULL && (end_node == NULL  temp != end_node->next)) {
+    while (temp != NULL && (end_node == NULL || temp != end_node->next)) {
         pthread_mutex_lock(&temp->lock);
         printf("%d", temp->data);
         temp = temp->next;
