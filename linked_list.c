@@ -1,4 +1,4 @@
-#include "linked_list.h"
+/*#include "linked_list.h"
 #include "memory_manager.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -225,4 +225,4 @@ void list_cleanup(Node **head) {
         temp = next;
     }
     *head = NULL;
-}
+}*/
