@@ -245,23 +245,23 @@ void list_insert(Node** head, uint16_t data) {
     }
     new_node->data = data;
     new_node->next = NULL;
-    pthread_mutex_init(&new_node->lock, NULL); // تهيئة القفل للعقدة الجديدة
+    pthread_mutex_init(&new_node->lock, NULL); // 
 
     if (*head == NULL) {
         *head = new_node;
     } else {
         Node* temp = *head;
-        pthread_mutex_lock(&temp->lock); // قفل العقدة الرئيسية
+        pthread_mutex_lock(&temp->lock); // 
 
         while (temp->next != NULL) {
             Node* next = temp->next;
-            pthread_mutex_lock(&next->lock); // قفل العقدة التالية
-            pthread_mutex_unlock(&temp->lock); // إلغاء قفل العقدة الحالية
+            pthread_mutex_lock(&next->lock); // 
+            pthread_mutex_unlock(&temp->lock); //
             temp = next;
         }
 
         temp->next = new_node;
-        pthread_mutex_unlock(&temp->lock); // إلغاء قفل آخر عقدة
+        pthread_mutex_unlock(&temp->lock); //
     }
 }
 
