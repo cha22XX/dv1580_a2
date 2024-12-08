@@ -225,6 +225,7 @@ void list_cleanup(Node **head) {
     *head = NULL;
 }*/
 
+/*
 #include "memory_manager.c"
 #include "linked_list.h"
 #include "memory_manager.h"
@@ -449,6 +450,169 @@ void list_cleanup(Node **head) {
         mem_free(temp);
         temp = next;
     }
+    *head = NULL;
+}
+*/
+
+#include "memory_manager.c"
+#include "linked_list.h"
+#include "memory_manager.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+
+// Initiera listan
+void list_init(Node **head, size_t size) {
+    mem_init(size);
+    *head = NULL;
+}
+
+// Infoga ett element i slutet av listan
+void list_insert(Node **head, uint16_t data) {
+    Node *new_node = (Node *)mem_alloc(sizeof(Node));
+    if (!new_node) {
+        printf("Memory allocation failed.\n");
+        return;
+    }
+
+    // Initiera den nya noden
+    new_node->data = data;
+    new_node->next = NULL;
+    pthread_mutex_init(&new_node->lock, NULL);
+
+    pthread_mutex_lock(&(*head == NULL ? NULL : (*head)->lock)); // Lås huvudnoden om listan inte är tom
+
+    if (*head == NULL) { // Tom lista
+        *head = new_node;
+    } else { // Traversera till slutet av listan
+        Node *temp = *head;
+        while (temp->next != NULL) {
+            pthread_mutex_lock(&temp->next->lock); // Lås nästa nod
+            pthread_mutex_unlock(&temp->lock);    // Lås upp nuvarande
+            temp = temp->next;
+        }
+        temp->next = new_node;
+        pthread_mutex_unlock(&temp->lock); // Lås upp sista noden
+    }
+}
+
+// Infoga en nod efter en given nod
+void list_insert_after(Node *prev_node, uint16_t data) {
+    if (prev_node == NULL) {
+        printf("Previous node cannot be NULL.\n");
+        return;
+    }
+
+    Node *new_node = (Node *)mem_alloc(sizeof(Node));
+    if (!new_node) {
+        printf("Memory allocation failed.\n");
+        return;
+    }
+
+    new_node->data = data;
+    new_node->next = NULL;
+    pthread_mutex_init(&new_node->lock, NULL);
+
+    pthread_mutex_lock(&prev_node->lock);
+    new_node->next = prev_node->next;
+    prev_node->next = new_node;
+    pthread_mutex_unlock(&prev_node->lock);
+}
+
+// Radera en nod med ett specifikt värde
+void list_delete(Node **head, uint16_t data) {
+    if (*head == NULL) {
+        printf("List is empty.\n");
+        return;
+    }
+
+    Node *temp = *head;
+    Node *prev = NULL;
+
+    pthread_mutex_lock(&temp->lock);
+
+    // Hantera första noden separat
+    if (temp->data == data) {
+        *head = temp->next;
+        pthread_mutex_unlock(&temp->lock);
+        pthread_mutex_destroy(&temp->lock);
+        mem_free(temp);
+        return;
+    }
+
+    while (temp != NULL && temp->data != data) {
+        if (prev != NULL) {
+            pthread_mutex_unlock(&prev->lock);
+        }
+        prev = temp;
+        temp = temp->next;
+        if (temp != NULL) {
+            pthread_mutex_lock(&temp->lock);
+        }
+    }
+
+    if (temp == NULL) { // Data hittades inte
+        printf("Data not found in the list.\n");
+        if (prev != NULL) {
+            pthread_mutex_unlock(&prev->lock);
+        }
+        return;
+    }
+
+    prev->next = temp->next;
+    pthread_mutex_unlock(&prev->lock);
+    pthread_mutex_unlock(&temp->lock);
+    pthread_mutex_destroy(&temp->lock);
+    mem_free(temp);
+}
+
+// Visa hela listan
+void list_display(Node **head) {
+    Node *temp = *head;
+    if (temp == NULL) {
+        printf("[]\n");
+        return;
+    }
+
+    printf("[");
+    while (temp != NULL) {
+        pthread_mutex_lock(&temp->lock);
+        printf("%d", temp->data);
+        temp = temp->next;
+        if (temp != NULL) {
+            printf(", ");
+        }
+        pthread_mutex_unlock(&temp->lock);
+    }
+    printf("]\n");
+}
+
+// Räkna antalet noder i listan
+int list_count_nodes(Node **head) {
+    int count = 0;
+    Node *temp = *head;
+
+    while (temp != NULL) {
+        pthread_mutex_lock(&temp->lock);
+        count++;
+        temp = temp->next;
+        pthread_mutex_unlock(&temp->lock);
+    }
+
+    return count;
+}
+
+// Rensa listan
+void list_cleanup(Node **head) {
+    Node *temp = *head;
+
+    while (temp != NULL) {
+        Node *next = temp->next;
+        pthread_mutex_destroy(&temp->lock);
+        mem_free(temp);
+        temp = next;
+    }
+
     *head = NULL;
 }
 
