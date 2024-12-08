@@ -466,8 +466,6 @@ void list_init(Node **head, size_t size) {
     mem_init(size);
     *head = NULL;
 }
-
-// Infoga ett element i slutet av listan
 void list_insert(Node **head, uint16_t data) {
     Node *new_node = (Node *)mem_alloc(sizeof(Node));
     if (!new_node) {
@@ -480,22 +478,25 @@ void list_insert(Node **head, uint16_t data) {
     new_node->next = NULL;
     pthread_mutex_init(&new_node->lock, NULL);
 
-    pthread_mutex_lock(&(*head == NULL ? NULL : (*head)->lock)); // Lås huvudnoden om listan inte är tom
-
     if (*head == NULL) { // Tom lista
         *head = new_node;
     } else { // Traversera till slutet av listan
         Node *temp = *head;
+
+        pthread_mutex_lock(&temp->lock); // Lås huvudnoden
+
         while (temp->next != NULL) {
-            pthread_mutex_lock(&temp->next->lock); // Lås nästa nod
-            pthread_mutex_unlock(&temp->lock);    // Lås upp nuvarande
-            temp = temp->next;
+            Node *next = temp->next;
+            pthread_mutex_lock(&next->lock); // Lås nästa nod
+            pthread_mutex_unlock(&temp->lock); // Lås upp nuvarande nod
+            temp = next;
         }
+
         temp->next = new_node;
         pthread_mutex_unlock(&temp->lock); // Lås upp sista noden
     }
 }
-
+ 
 // Infoga en nod efter en given nod
 void list_insert_after(Node *prev_node, uint16_t data) {
     if (prev_node == NULL) {
