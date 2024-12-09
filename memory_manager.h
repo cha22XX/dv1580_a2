@@ -36,7 +36,7 @@ void mem_free(void* block);
 void* mem_resize(void* block, size_t size);
 void mem_deinit(void);
 #ifdef __cplusplus
-//}
+}
 #endif
 
 #endif // MEMORY_MANAGER_H
